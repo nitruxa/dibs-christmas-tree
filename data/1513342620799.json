@@ -1,0 +1,43 @@
+{
+    "name": "Arnaldas' christmas tree",
+    "date": "Fri Dec 15 2017 14:57:00 GMT+0200 (EET)",
+    "animation": [
+        {
+            "task": "loop1",
+            "cycles": 1
+        }
+    ],
+    "task": [
+        {
+            "name": "loop1",
+            "rules": [
+                {
+                    "stripes": [
+                        [0],
+                        [0],
+                        [0],
+                        [100],
+                        [0],
+                        [0],
+                        [0],
+                        [0]
+                    ],
+                    "time": 100
+                },
+                {
+                    "stripes": [
+                        [0],
+                        [0],
+                        [0],
+                        [0],
+                        [0],
+                        [0],
+                        [0],
+                        [100]
+                    ],
+                    "time": 100
+                }
+            ]
+        }
+    ]
+}
