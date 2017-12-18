@@ -9,16 +9,16 @@ const APP_PORT = 5000;
 let taskList = [];
 let activeTask = null;
 
-readTasks()
-    .then(tasks => {
-        taskList = tasks;
-        sendToTelnet(0);
-    })
-    .catch(error => {
-        throw new Error(error);
-    });
-
-
+function cacheTasks() {
+    readTasks()
+        .then(tasks => {
+            taskList = tasks;
+            sendToTelnet(0);
+        })
+        .catch(error => {
+            throw new Error(error);
+        });
+}
 
 const app = express();
 http.Server(app); // eslint-disable-line
@@ -67,6 +67,11 @@ app.get('/turn-off', (req, res) => {
     res.status(200).json({ status: 'OK' });
 });
 
+app.get('/cache-tasks', (req, res) => {
+    cacheTasks();
+    res.status(200).json({ status: 'OK' });
+});
+
 app.use('*', (req, res) => {
     res.status(404).json({ error: 'Page not found' });
 });
@@ -76,6 +81,8 @@ app.listen(APP_PORT, function (err) {
         console.log(err);
         return;
     }
+
+    cacheTasks();
 
     console.log(`Listening at http://127.0.0.1:${APP_PORT}`);
 });
