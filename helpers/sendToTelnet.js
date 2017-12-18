@@ -1,17 +1,35 @@
 import net from 'net';
 
-const client = new net.Socket();
 let isConnected = false;
+const TELNET_PORT = 23;
+const TELNET_IP = '192.168.10.234';
+
+const client = new net.Socket();
 
 function connectClient() {
-    client.connect(23, '192.168.10.234', () => {
-        isConnected = true;
-        console.log('Connected');
-    });
+    try {
+        console.log(`Connecting to telnet ip ${TELNET_IP}`);
+        client.connect(TELNET_PORT, TELNET_IP, () => {
+            isConnected = true;
+            client.write(`\n`);
+            console.log('Connected to TELNET');
+        });
+    } catch (error) {
+        console.log(error);
+    }
 }
 
-client.on('data', () => {
-    // console.log('Received: ' + data);
+client.on('error', error => {
+    console.log(`${error}`);
+});
+
+client.on('timeout', () => {
+    console.log('TELNET Timeouted');
+    connectClient();
+});
+
+client.on('data', (data) => {
+    console.log('Received: ' + data);
     // client.destroy(); // kill client after server's response
 });
 
@@ -32,12 +50,13 @@ export default function sendToTelnet(values) {
         data.fill(values);
     }
 
-    data.map(value => {
-        return value * 255 / 100;
+    data = data.map(value => {
+        return Number.parseInt(value * 255 / 100);
     });
+
 
     if (isConnected) {
         // console.log(`PWM: ${data.join(',')}`);
-        client.write(`PWM: ${data.join(',')}\n`);
+        client.write(`PWM: ${data.join(',')}\r\n`);
     }
 };

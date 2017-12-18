@@ -20,7 +20,7 @@ export function startTask(taskData, callback) {
 
     let timeFrames = rulesArray.map(({ time }) => time);
 
-    timeFrames = reduce(timeFrames, (result, value, index) => {
+    timeFrames = reduce(timeFrames, (result, value) => {
         const isArray = Array.isArray(result);
         return isArray ? [...result, last(result) + value] : [result, result + value];
     });
